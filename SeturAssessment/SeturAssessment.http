@@ -1,0 +1,6 @@
+@SeturAssessment_HostAddress = http://localhost:5153
+
+GET {{SeturAssessment_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
