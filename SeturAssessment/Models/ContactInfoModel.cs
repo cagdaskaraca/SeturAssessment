@@ -9,6 +9,6 @@ namespace ContactService.Models
         public InfoType Type { get; set; }
         public string Content { get; set; }
 
-        public Contact Contact { get; set; }
+        public ContactModel Contact { get; set; }
     }
 }
