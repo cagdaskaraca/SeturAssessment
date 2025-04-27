@@ -1,24 +1,19 @@
-﻿version: '3.9'
+﻿
 services:
 
   contactservice:
     build:
-      context: ./SeturAssessment
-      dockerfile: Dockerfile
+      context: .
     ports:
       - "5000:80"
     depends_on:
       - postgres
       - kafka
 
-  reportservice:
-    build: ./ReportService
-    ports:
-      - "5001:80"
-    depends_on:
-      - postgres
-      - kafka  # Kafka servisine doğru bağımlılık
+  
 
+
+  
   postgres:
     image: postgres:14
     container_name: phonebook_postgres
