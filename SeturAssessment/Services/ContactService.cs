@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ContactService.Services
+namespace SeturAssessment.Services
 {
     public class ContactService : IContactService
     {
@@ -58,5 +58,11 @@ namespace ContactService.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<ContactModel>> GetAll()
+        {
+            return await _context.ContactModel.ToListAsync();
+        }
+
     }
 }

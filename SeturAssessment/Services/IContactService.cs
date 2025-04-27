@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ContactService.Models;
 
-namespace ContactService.Services
+namespace SeturAssessment.Services
 {
     public interface IContactService
     {

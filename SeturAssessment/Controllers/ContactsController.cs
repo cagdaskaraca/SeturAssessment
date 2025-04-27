@@ -1,10 +1,12 @@
-﻿using ContactService.Models;
-using ContactService.Services;
+﻿using SeturAssessment.Models;
 using Microsoft.AspNetCore.Mvc;
+using SeturAssessment.Services;
+using SeturAssessment.Models;
 using System;
 using System.Threading.Tasks;
+using ContactService.Models;
 
-namespace ContactService.Controllers
+namespace SeturAssessment.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -54,5 +56,8 @@ namespace ContactService.Controllers
             var result = await _service.DeleteContactInfoAsync(contactId, infoId);
             return result ? NoContent() : NotFound();
         }
+
+        
+
     }
 }

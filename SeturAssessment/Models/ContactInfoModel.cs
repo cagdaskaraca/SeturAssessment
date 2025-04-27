@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SeturAssessment.Models;
+using System;
 
 namespace ContactService.Models
 {

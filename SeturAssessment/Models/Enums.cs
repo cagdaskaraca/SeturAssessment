@@ -1,4 +1,4 @@
-﻿namespace ContactService.Models
+﻿namespace SeturAssessment.Models
 {
     public enum InfoType
     {
