@@ -3,10 +3,15 @@ using ReportService.Models;
 
 namespace SeturAssessment.Data
 {
-    public class ReportDbContext : DbContext
+    
+    namespace ReportService.Data
     {
-        public ReportDbContext(DbContextOptions<ReportDbContext> options) : base(options) { }
+        public class ReportDbContext : DbContext
+        {
+            public ReportDbContext(DbContextOptions<ReportDbContext> options) : base(options) { }
 
-        public DbSet<ReportModel> Reports { get; set; }
+            public DbSet<ReportModel> Reports { get; set; }
+        }
     }
+
 }

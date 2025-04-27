@@ -5,8 +5,10 @@ using SeturAssessment.Data;
 using SeturAssessment.Controllers;
 using ContactService.Models;
 using SeturAssessment.Services;
+using Moq;
+using System.Web.Http.Results;
 
-namespace SeturAssessmentTest.Tests
+namespace ContactControllerTest.Tests
 {
     public class ContactControllerTests
     {
@@ -35,6 +37,7 @@ namespace SeturAssessmentTest.Tests
             {
                 Name = "Çağdaş",
                 Surname = "Karaca",
+                Email = "test@example.com",
                 Company = "Setur"
             });
 
@@ -47,5 +50,34 @@ namespace SeturAssessmentTest.Tests
             okResult.Value.Should().BeAssignableTo<IEnumerable<ContactModel>>();
             (okResult.Value as IEnumerable<ContactModel>).Should().ContainSingle();
         }
+
+        [Fact]
+        public async Task Create_ShouldReturnCreatedResult()
+        {
+            // Arrange
+            var contactModel = new ContactModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Test Name",
+                Email = "test@example.com",
+                Company = "Karaca Yazılım A.Ş"
+            };
+
+            var mockService = new Mock<IContactService>();
+            mockService.Setup(s => s.CreateAsync(It.IsAny<ContactModel>())).ReturnsAsync(contactModel);
+
+            var controller = new ContactsController(mockService.Object);
+
+            // Act
+            var result = await controller.Create(contactModel);
+
+            // Assert
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            var returnValue = Assert.IsType<ContactModel>(createdResult.Value);
+
+            Assert.Equal(contactModel.Id, returnValue.Id);
+            Assert.Equal(contactModel.Email, returnValue.Email);
+        }
+
     }
 }

@@ -35,6 +35,7 @@ namespace ContactServiceTest.Tests
             {
                 Name = "Çağdaş",
                 Surname = "Karaca",
+                Email = "test@example.com",
                 Company = "Setur"
             };
 
@@ -57,6 +58,7 @@ namespace ContactServiceTest.Tests
             {
                 Name = "Çağdaş",
                 Surname = "Karaca",
+                Email = "test@example.com",
                 Company = "Setur"
             };
 
@@ -82,6 +84,7 @@ namespace ContactServiceTest.Tests
             {
                 Name = "Çağdaş",
                 Surname = "Karaca",
+                Email = "Deneme@example.com",
                 Company = "Setur"
             };
 
@@ -109,6 +112,7 @@ namespace ContactServiceTest.Tests
             {
                 Name = "Çağdaş",
                 Surname = "Karaca",
+                Email = "test@example.com",
                 Company = "Setur"
             };
 

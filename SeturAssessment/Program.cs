@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ReportService.Services;
 using SeturAssessment.Data;
+using SeturAssessment.Data.ReportService.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

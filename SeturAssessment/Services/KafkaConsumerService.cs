@@ -1,31 +1,36 @@
 ﻿using Confluent.Kafka;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ReportService.Models;
-using SeturAssessment.Data;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using SeturAssessment.Data.ReportService.Data;
 
 namespace ReportService.Services
 {
     public class KafkaConsumerService : BackgroundService
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly string _bootstrapServers = "kafka:9092";
-        private readonly string _topic = "location-created";
+        private readonly ReportDbContext _dbContext;
+        private readonly ILogger<KafkaConsumerService> _logger;
 
-        public KafkaConsumerService(IServiceScopeFactory serviceScopeFactory)
+        public KafkaConsumerService(ReportDbContext dbContext, ILogger<KafkaConsumerService> logger)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _dbContext = dbContext;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = _bootstrapServers,
+                BootstrapServers = "kafka:9092",
                 GroupId = "report-service-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            consumer.Subscribe(_topic);
+            consumer.Subscribe("location-created");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -34,26 +39,20 @@ namespace ReportService.Services
                     var consumeResult = consumer.Consume(stoppingToken);
                     var locationData = consumeResult.Message.Value;
 
-                    // Create a new scope and resolve the ReportDbContext
-                    using (var scope = _serviceScopeFactory.CreateScope())
+                    var report = new ReportModel
                     {
-                        var dbContext = scope.ServiceProvider.GetRequiredService<ReportDbContext>();
+                        Id = Guid.NewGuid(),
+                        Location = locationData,
+                        CreatedAt = DateTime.UtcNow
+                    };
 
-                        var report = new ReportModel
-                        {
-                            Id = Guid.NewGuid(),
-                            Location = locationData,
-                            CreatedAt = DateTime.UtcNow
-                        };
-
-                        dbContext.Reports.Add(report);
-                        await dbContext.SaveChangesAsync();
-                    }
+                    _dbContext.Reports.Add(report);
+                    await _dbContext.SaveChangesAsync();
+                    _logger.LogInformation($"Report created for {locationData}");
                 }
                 catch (Exception ex)
                 {
-                    // Handle exception and log it.
-                    Console.WriteLine($"Kafka Consume Error: {ex.Message}");
+                    _logger.LogError($"Error consuming Kafka message: {ex.Message}");
                 }
             }
         }
